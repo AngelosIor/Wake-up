@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ημέρα Μου — Ξυπνητήρι &amp; Πρόγραμμα</title>
+<meta name="description" content="Ξυπνητήρι, πρόγραμμα ημέρας και ειδοποιήσεις, όλα σε ένα.">
+<meta name="theme-color" content="#0F1226">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzEyMTQyQiIvPgogIDxyZWN0IHk9IjcyIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjI4IiBmaWxsPSIjMUY3QTczIi8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1OCIgcj0iMjIiIGZpbGw9IiNFODlBM0MiLz4KPC9zdmc+Cg==">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzEyMTQyQiIvPgogIDxyZWN0IHk9IjcyIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjI4IiBmaWxsPSIjMUY3QTczIi8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1OCIgcj0iMjIiIGZpbGw9IiNFODlBM0MiLz4KPC9zdmc+Cg==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #12132B;
+  --bg: #F4F5FB;
+  --card: #FFFFFF;
+  --line: #E7E8F2;
+  --line-soft: #EFF0F8;
+  --muted: #6A6D89;
+  --gold: #EDA43F;
+  --gold-deep: #B9701B;
+  --teal: #17A398;
+  --teal-deep: #0D6E63;
+  --navy: #171A3D;
+  --navy-2: #262A5C;
+  --danger: #E0533F;
+  --radius-s: 13px;
+  --radius-m: 20px;
+  --shadow: 0 2px 6px rgba(18,19,43,0.05), 0 12px 32px rgba(18,19,43,0.08);
+  --shadow-lift: 0 8px 20px rgba(18,19,43,0.10), 0 20px 44px rgba(18,19,43,0.10);
+  --grad-main: linear-gradient(135deg, var(--navy) 0%, var(--teal) 58%, var(--gold) 100%);
+  --grad-soft: linear-gradient(135deg, rgba(23,26,61,0.08), rgba(23,163,152,0.10));
+  --ease: cubic-bezier(.22,.9,.32,1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background:
+    radial-gradient(900px 420px at 50% -10%, rgba(23,26,61,0.07) 0%, rgba(23,26,61,0) 60%),
+    radial-gradient(700px 360px at 92% 2%, rgba(237,164,63,0.13) 0%, rgba(237,164,63,0) 55%),
+    var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.55;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+h1, h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; margin: 0; color: var(--ink); }
+h2 { font-size: 1.28rem; letter-spacing: -0.015em; font-weight: 700; }
+p { margin: 0; }
+
+/* ---------- Shared motion ---------- */
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.page.active { animation: fadeSlideUp 0.32s var(--ease) both; }
+.list li { animation: fadeSlideUp 0.28s var(--ease) both; }
+.timeline li { animation: fadeIn 0.35s var(--ease) both; }
+
+/* ---------- Skyline decoration ---------- */
+.skyline { position: relative; height: 6px; width: 100%; background: linear-gradient(90deg, #1B2050 0%, #5B4B8A 22%, #C97B4A 48%, #E8B24A 62%, #7FB8C9 82%, #1B2050 100%); overflow: visible; }
+.sun { position: absolute; top: -5px; left: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(237,164,63,0.2); transform: translateX(-50%); transition: left 0.6s ease; }
+
+/* ---------- Header ---------- */
+.top { padding: 2rem 1.25rem 1.1rem; text-align: center; }
+.top-inner { max-width: 640px; margin: 0 auto; }
+.eyebrow-free { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.4rem; font-weight: 500; }
+#clockNow {
+  font-size: clamp(2.7rem, 12vw, 3.9rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  font-weight: 700;
+  background: var(--grad-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.date { color: var(--muted); margin-top: 0.45rem; font-size: 0.95rem; text-transform: capitalize; font-weight: 500; }
+
+/* ---------- Nav ---------- */
+.navbar { position: sticky; top: 0; z-index: 40; display: flex; gap: 0.3rem; justify-content: center; padding: 0.6rem 0.6rem; background: rgba(244,245,251,0.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.navtab { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid transparent; background: transparent; color: var(--muted); font-family: inherit; font-weight: 600; font-size: 0.87rem; padding: 0.55rem 0.9rem; border-radius: 999px; cursor: pointer; white-space: nowrap; transition: background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.15s var(--ease); }
+.navtab:hover { color: var(--ink); }
+.navtab.active { background: var(--grad-main); color: #fff; box-shadow: 0 6px 16px rgba(23,26,61,0.28); }
+.navtab:active { transform: scale(0.96); }
+.navtab:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.nav-icon { font-size: 1.05rem; }
+
+/* On narrow phones, 4 labeled tabs don't fit comfortably — switch to compact
+   icon-only tabs (still fully tappable, still individually accessible via
+   aria-label) so nothing gets clipped off-screen. */
+@media (max-width: 420px) {
+  .navbar { gap: 0.2rem; padding: 0.55rem 0.4rem; justify-content: space-between; }
+  .navtab { flex: 1 1 0; justify-content: center; padding: 0.6rem 0.3rem; }
+  .nav-label { display: none; }
+  .nav-icon { font-size: 1.2rem; }
+}
+
+/* ---------- Layout ---------- */
+main { max-width: 640px; margin: 0 auto; padding: 1.1rem 1rem 4rem; }
+.page { display: none; flex-direction: column; gap: 1.4rem; }
+.page.active { display: flex; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 1.65rem; box-shadow: var(--shadow); transition: box-shadow 0.2s var(--ease); }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 1.15rem; flex-wrap: wrap; }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+
+/* ---------- Shortcut cards (home) ---------- */
+.shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.shortcut-card { position: relative; overflow: hidden; text-align: left; border: 1px solid var(--line); background: var(--card); border-radius: var(--radius-m); padding: 1.3rem 1.15rem 1.2rem; cursor: pointer; box-shadow: var(--shadow); font-family: inherit; transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease); }
+.shortcut-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.shortcut-card:active { transform: translateY(-1px) scale(0.99); }
+.shortcut-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--grad-main); }
+.shortcut-card .sc-icon { font-size: 1.3rem; display: block; margin-bottom: 0.5rem; }
+.shortcut-card .sc-count { font-family: 'Fraunces', Georgia, serif; font-size: 2rem; font-weight: 700; display: block; margin-bottom: 0.1rem; }
+.shortcut-card.alarms .sc-count { color: var(--gold-deep); }
+.shortcut-card.schedule .sc-count { color: var(--teal-deep); }
+.shortcut-card.blood { grid-column: 1 / -1; }
+.shortcut-card.blood .sc-count { color: var(--danger); }
+.shortcut-card .sc-count-text { font-size: 1.25rem; }
+.shortcut-card .sc-label { font-weight: 700; }
+.shortcut-card .sc-sub { color: var(--muted); font-size: 0.85rem; display: block; margin-top: 0.2rem; }
+@media (max-width: 420px) { .shortcuts { grid-template-columns: 1fr; } }
+
+/* ---------- Setup card ---------- */
+.setup h2 { margin-bottom: 0.55rem; }
+.setup .muted { display: block; margin-bottom: 1.1rem; }
+.row { display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; }
+.status { font-size: 0.88rem; color: var(--muted); padding: 0.35rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; font-weight: 600; }
+.status.on { color: var(--teal-deep); border-color: var(--teal); background: rgba(23,163,152,0.1); }
+.status.off { color: var(--danger); border-color: var(--danger); background: rgba(224,83,63,0.07); }
+.howto { margin-top: 1.1rem; font-size: 0.9rem; color: var(--ink); }
+.howto summary { cursor: pointer; color: var(--teal-deep); font-weight: 600; }
+.howto ol { margin: 0.75rem 0 0; padding-left: 1.2rem; color: var(--muted); }
+.howto li { margin-bottom: 0.4rem; }
+
+/* ---------- Buttons ---------- */
+.btn { border: none; border-radius: var(--radius-s); padding: 0.7rem 1.2rem; font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: transform 0.12s var(--ease), filter 0.15s var(--ease), box-shadow 0.15s var(--ease), background 0.15s var(--ease), color 0.15s var(--ease); letter-spacing: -0.005em; }
+.btn:active { transform: scale(0.96); }
+.btn:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.btn.primary { background: var(--grad-main); color: #fff; box-shadow: 0 6px 16px rgba(23,26,61,0.24); }
+.btn.primary:hover { filter: brightness(1.08); box-shadow: 0 8px 20px rgba(23,26,61,0.3); }
+.btn.ghost { background: #fff; color: var(--ink); border: 1.5px solid var(--line); }
+.btn.ghost:hover { border-color: var(--teal); color: var(--teal-deep); }
+.btn.small { padding: 0.5rem 0.9rem; font-size: 0.85rem; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- Timeline ---------- */
+.timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+.timeline::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+.timeline li { position: relative; padding: 0 0 1.15rem 2.1rem; display: flex; flex-direction: column; gap: 0.15rem; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--card); border: 2px solid var(--muted); }
+.timeline li.kind-alarm::before { border-color: var(--gold-deep); background: var(--gold); }
+.timeline li.kind-event::before { border-color: var(--teal-deep); background: var(--teal); }
+.timeline .t-time { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); }
+.timeline .t-label { color: var(--muted); font-size: 0.92rem; }
+.empty-note { color: var(--muted); font-size: 0.9rem; padding: 0.9rem 1rem; text-align: center; border: 1.5px dashed var(--line); border-radius: var(--radius-s); background: var(--line-soft); }
+
+/* ---------- Forms ---------- */
+.form { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; margin-bottom: 1.3rem; padding-bottom: 1.3rem; border-bottom: 1px solid var(--line); }
+.field { display: flex; flex-direction: column; gap: 0.4rem; min-width: 120px; }
+.field.grow { flex: 1 1 200px; }
+.field label { font-size: 0.8rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+input[type="time"], input[type="date"], input[type="text"], input[type="url"], input[type="number"], select {
+  font-family: inherit; font-size: 0.95rem; padding: 0.65rem 0.75rem;
+  border: 1.5px solid var(--line); border-radius: var(--radius-s); background: #fff; color: var(--ink);
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+input:hover, select:hover { border-color: #CDD0E6; }
+input:focus-visible, select:focus-visible { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px rgba(23,163,152,0.15); }
+.field.days { flex: 1 1 260px; }
+.daypicker { display: flex; gap: 0.35rem; }
+.daypicker button { width: 35px; height: 35px; border-radius: 50%; border: 1.5px solid var(--line); background: #fff; color: var(--muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.15s var(--ease); }
+.daypicker button:hover { border-color: var(--teal); }
+.daypicker button.active { background: var(--grad-main); border-color: transparent; color: #fff; font-weight: 700; box-shadow: 0 4px 10px rgba(23,26,61,0.25); }
+.hint { font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
+.sound-row { display: flex; gap: 0.5rem; align-items: center; }
+.sound-row input { flex: 1; }
+.sound-feedback { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; min-height: 1.1em; }
+.sound-feedback.ok { color: var(--teal-deep); }
+.sound-feedback.err { color: var(--danger); }
+.checkbox-label { display: flex; align-items: center; gap: 0.45rem; font-size: 0.87rem; font-weight: 700; color: var(--ink); cursor: pointer; text-transform: none; }
+.checkbox-label input { width: 18px; height: 18px; accent-color: var(--teal); cursor: pointer; }
+
+/* ---------- Lists ---------- */
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+.list li { display: flex; align-items: center; gap: 0.85rem; padding: 0.8rem 0.9rem; border: 1.5px solid var(--line); border-radius: var(--radius-s); background: #fff; transition: box-shadow 0.15s var(--ease), border-color 0.15s var(--ease); }
+.list li:hover { border-color: #D8DAEC; box-shadow: 0 3px 10px rgba(18,19,43,0.05); }
+.list li .swatch { width: 7px; align-self: stretch; border-radius: 5px; background: var(--muted); flex-shrink: 0; }
+.list li.kind-alarm .swatch { background: var(--gold); }
+.list li.kind-event .swatch { background: var(--teal); }
+.list .item-main { flex: 1; min-width: 0; }
+.list .item-time { font-variant-numeric: tabular-nums; font-weight: 700; }
+.list .item-label { color: var(--muted); font-size: 0.88rem; overflow-wrap: anywhere; margin-top: 0.1rem; }
+.list .item-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+.list .item-actions button { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.1rem; padding: 0.3rem; line-height: 1; border-radius: 8px; transition: color 0.15s ease, background 0.15s ease; }
+.list .item-actions button:hover { color: var(--danger); background: rgba(224,83,63,0.08); }
+.list li.disabled { opacity: 0.5; }
+
+.toggle { position: relative; width: 40px; height: 23px; border-radius: 999px; background: var(--line); border: none; cursor: pointer; flex-shrink: 0; transition: background 0.2s var(--ease); }
+.toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; border-radius: 50%; background: #fff; transition: left 0.2s var(--ease); box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.toggle.on { background: var(--teal); }
+.toggle.on::after { left: 19px; }
+
+/* ---------- Week strip (Schedule page) ---------- */
+.weekstrip-wrap { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 1.3rem; }
+.week-nav { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--line); background: #fff; color: var(--navy-2); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.15s var(--ease); }
+.week-nav:hover { border-color: var(--teal); color: var(--teal-deep); }
+.week-nav:active { transform: scale(0.92); }
+.weekstrip { flex: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; }
+.day-pill { display: flex; flex-direction: column; align-items: center; gap: 0.18rem; padding: 0.55rem 0.2rem; border-radius: 14px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; font-family: inherit; position: relative; transition: all 0.15s var(--ease); }
+.day-pill:hover { border-color: var(--teal); }
+.day-pill .dp-dow { font-size: 0.66rem; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.day-pill .dp-num { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+.day-pill.is-today:not(.active) { border-color: var(--teal); }
+.day-pill.is-today:not(.active) .dp-num { color: var(--teal-deep); }
+.day-pill.active { background: var(--grad-main); border-color: transparent; box-shadow: 0 6px 16px rgba(23,26,61,0.28); transform: translateY(-1px); }
+.day-pill.active .dp-dow, .day-pill.active .dp-num { color: #fff; }
+.day-pill.has-tasks::after { content: ""; position: absolute; bottom: 5px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+.day-pill.active.has-tasks::after { background: #fff; }
+
+/* ---------- Task list (Schedule page) ---------- */
+.task-list { gap: 0.7rem; }
+.task-item { align-items: flex-start; padding: 0.9rem; border-width: 1.5px; }
+.task-item.completed { opacity: 0.55; }
+.task-check { flex-shrink: 0; width: 27px; height: 27px; border-radius: 50%; border: 2px solid var(--teal); background: #fff; color: transparent; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.1rem; transition: all 0.15s var(--ease); }
+.task-check:hover { box-shadow: 0 0 0 4px rgba(23,163,152,0.14); }
+.task-check.checked { background: var(--teal); color: #fff; }
+.task-main { flex: 1; min-width: 0; }
+.task-time { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.task-dur-badge { background: var(--grad-soft); color: var(--navy-2); font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.55rem; border-radius: 999px; }
+.task-notify-badge { color: var(--muted); font-size: 0.72rem; }
+.task-title { margin-top: 0.2rem; font-size: 0.93rem; }
+.task-item.completed .task-title { text-decoration: line-through; }
+.task-timer-row { margin-top: 0.55rem; display: flex; align-items: center; gap: 0.5rem; }
+.timer-btn { font-variant-numeric: tabular-nums; }
+.timer-btn.running { background: var(--teal); color: #fff; }
+.task-actions { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; flex-shrink: 0; }
+.task-actions .del-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.1rem; padding: 0.25rem; border-radius: 8px; transition: all 0.15s ease; }
+.task-actions .del-btn:hover { color: var(--danger); background: rgba(224,83,63,0.08); }
+
+/* ---------- Blood donation page ---------- */
+.blood-state { display: flex; flex-direction: column; gap: 0.7rem; }
+.blood-big-status { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-weight: 700; }
+.blood-big-status.ready { color: var(--teal-deep); }
+.blood-sub-status { color: var(--muted); font-size: 0.9rem; }
+.progress-bar-track { width: 100%; height: 10px; border-radius: 999px; background: var(--line-soft); overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 999px; background: var(--grad-main); transition: width 0.4s var(--ease); }
+.blood-ready-banner { display: flex; flex-direction: column; gap: 0.7rem; padding: 1rem; border-radius: var(--radius-s); background: rgba(224,83,63,0.07); border: 1.5px solid rgba(224,83,63,0.25); }
+.blood-ready-banner .blood-big-status { color: var(--danger); }
+
+/* ---------- Footer ---------- */
+.foot { text-align: center; color: var(--muted); font-size: 0.82rem; padding: 1.2rem 0.5rem 0; }
+
+/* ---------- Ringing overlay ---------- */
+@keyframes ringPop { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+.ring-overlay[hidden] { display: none; }
+.ring-overlay { position: fixed; inset: 0; background: rgba(18,19,43,0.94); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1.5rem; }
+.ring-box { background: var(--card); border-radius: var(--radius-m); padding: 2.1rem 2rem; text-align: center; max-width: 360px; width: 100%; animation: ringPop 0.28s var(--ease) both; }
+.ring-kicker { color: var(--gold-deep); font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.82rem; letter-spacing: 0.04em; }
+.ring-box h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.ring-elapsed { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.6rem; display: block; }
+.ring-actions { display: flex; gap: 0.75rem; justify-content: center; }
+
+@media (max-width: 420px) {
+  .form { flex-direction: column; align-items: stretch; }
+  .field { width: 100%; }
+  .day-pill .dp-dow { font-size: 0.58rem; }
+  .card { padding: 1.35rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="skyline" aria-hidden="true"><div class="sun" id="sunDot"></div></div>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="eyebrow-free" id="greeting">Καλημέρα</p>
+    <h1 id="clockNow">--:--</h1>
+    <p class="date" id="dateNow">—</p>
+  </div>
+</header>
+
+<nav class="navbar" id="navbar">
+  <button class="navtab" data-page="home" aria-label="Αρχική"><span class="nav-icon">🏠</span><span class="nav-label">Αρχική</span></button>
+  <button class="navtab" data-page="alarms" aria-label="Ξυπνητήρια"><span class="nav-icon">⏰</span><span class="nav-label">Ξυπνητήρια</span></button>
+  <button class="navtab" data-page="schedule" aria-label="Πρόγραμμα"><span class="nav-icon">🗓️</span><span class="nav-label">Πρόγραμμα</span></button>
+  <button class="navtab" data-page="blood" aria-label="Αιμοδοσία"><span class="nav-icon">🩸</span><span class="nav-label">Αιμοδοσία</span></button>
+</nav>
+
+<main>
+
+  <!-- ================= HOME PAGE ================= -->
+  <div class="page" id="page-home" data-page="home">
+
+    <section class="shortcuts">
+      <button class="shortcut-card alarms" data-goto="alarms">
+        <span class="sc-icon">⏰</span>
+        <span class="sc-count" id="homeAlarmCount">0</span>
+        <span class="sc-label">Ξυπνητήρια</span>
+        <span class="sc-sub">ενεργά σήμερα</span>
+      </button>
+      <button class="shortcut-card schedule" data-goto="schedule">
+        <span class="sc-icon">🗓️</span>
+        <span class="sc-count" id="homeEventCount">0</span>
+        <span class="sc-label">Πρόγραμμα</span>
+        <span class="sc-sub">εργασίες σήμερα</span>
+      </button>
+      <button class="shortcut-card blood" data-goto="blood">
+        <span class="sc-icon">🩸</span>
+        <span class="sc-count sc-count-text" id="homeBloodStatus">—</span>
+        <span class="sc-label">Αιμοδοσία</span>
+        <span class="sc-sub" id="homeBloodSub">καταχώρησε δωρεά</span>
+      </button>
+    </section>
+
+    <section class="card setup" id="setupCard">
+      <h2>Ειδοποιήσεις στο κινητό</h2>
+      <p class="muted">Για να λαμβάνεις ειδοποιήσεις, δώσε άδεια στον browser και άφησε τη σελίδα ανοιχτή (έστω στο background). Ισχύει για τα ξυπνητήρια και για το πρόγραμμα.</p>
+      <div class="row">
+        <button class="btn primary" id="btnPermission">Ενεργοποίηση ειδοποιήσεων</button>
+        <span class="status" id="permStatus">Άγνωστη κατάσταση</span>
+      </div>
+      <details class="howto">
+        <summary>Πώς το βάζω σαν εικονίδιο στην αρχική οθόνη του κινητού;</summary>
+        <ol>
+          <li>Άνοιξε τη σελίδα από τον browser του κινητού (Chrome/Safari).</li>
+          <li>Μενού browser → «Προσθήκη στην αρχική οθόνη» / «Add to Home Screen».</li>
+          <li>Άνοιξέ την από το νέο εικονίδιο και πάτα «Ενεργοποίηση ειδοποιήσεων».</li>
+          <li>Άφησέ τη ανοιχτή (έστω στο background) — αν το κινητό την «σκοτώσει» εντελώς από τη μνήμη, τα ξυπνητήρια δεν θα χτυπήσουν.</li>
+        </ol>
+      </details>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>Η σημερινή γραμμή ώρας</h2>
+        <span class="muted small">Ξυπνητήρια &amp; πρόγραμμα, με τη σειρά</span>
+      </div>
+      <ol class="timeline" id="timeline"></ol>
+      <p class="empty-note" id="timelineEmpty" hidden>Δεν έχεις τίποτα προγραμματισμένο για σήμερα.</p>
+    </section>
+
+  </div>
+
+  <!-- ================= ALARMS PAGE ================= -->
+  <div class="page" id="page-alarms" data-page="alarms">
+
+    <section class="card">
+      <div class="section-head"><h2>Ξυπνητήρια</h2><span class="muted small">Φτιάξε όσα θέλεις, χωρίς όριο</span></div>
+
+      <form class="form" id="alarmForm">
+        <div class="field">
+          <label for="alarmTime">Ώρα</label>
+          <input type="time" id="alarmTime" required>
+        </div>
+        <div class="field grow">
+          <label for="alarmLabel">Ετικέτα</label>
+          <input type="text" id="alarmLabel" placeholder="π.χ. Ξύπνημα για δουλειά" maxlength="60">
+        </div>
+        <div class="field days">
+          <label>Επανάληψη</label>
+          <div class="daypicker" id="alarmDays">
+            <button type="button" data-day="1">Δ</button>
+            <button type="button" data-day="2">Τ</button>
+            <button type="button" data-day="3">Τ</button>
+            <button type="button" data-day="4">Π</button>
+            <button type="button" data-day="5">Π</button>
+            <button type="button" data-day="6">Σ</button>
+            <button type="button" data-day="0">Κ</button>
+          </div>
+          <p class="hint">Χωρίς επιλογή = μία φορά, σήμερα</p>
+        </div>
+        <div class="field">
+          <label for="alarmDuration">Πόση ώρα να χτυπάει</label>
+          <select id="alarmDuration">
+            <option value="0" selected>Απεριόριστα, μέχρι να το σταματήσεις</option>
+            <option value="60">1 λεπτό</option>
+            <option value="180">3 λεπτά</option>
+            <option value="300">5 λεπτά</option>
+            <option value="600">10 λεπτά</option>
+            <option value="1800">30 λεπτά</option>
+            <option value="3600">1 ώρα</option>
+          </select>
+        </div>
+        <div class="field grow">
+          <label for="alarmSoundUrl">Ήχος (προαιρετικό — link σε online τραγούδι/ήχο)</label>
+          <div class="sound-row">
+            <input type="url" id="alarmSoundUrl" placeholder="https://... (άφησέ το κενό για τον προεπιλεγμένο ήχο)">
+            <button type="button" class="btn ghost small" id="testSoundBtn">Δοκιμή</button>
+          </div>
+          <p class="sound-feedback" id="soundFeedback"></p>
+          <p class="hint">Χρειάζεται ένα άμεσο link προς αρχείο ήχου (π.χ. τελειώνει σε .mp3/.wav/.ogg). Links από YouTube/Spotify δεν παίζουν έτσι — αν δεν δουλέψει, θα χτυπήσει ο προεπιλεγμένος ήχος.</p>
+        </div>
+        <button class="btn primary" type="submit">Προσθήκη ξυπνητηριού</button>
+      </form>
+
+      <ul class="list" id="alarmList"></ul>
+      <p class="empty-note" id="alarmEmpty" hidden>Δεν έχεις κανένα ξυπνητήρι ακόμα.</p>
+    </section>
+
+  </div>
+
+  <!-- ================= SCHEDULE PAGE ================= -->
+  <div class="page" id="page-schedule" data-page="schedule">
+
+    <section class="card">
+      <div class="section-head"><h2>Πρόγραμμα ημέρας</h2></div>
+
+      <div class="weekstrip-wrap">
+        <button class="week-nav" id="weekPrev" type="button" aria-label="Προηγούμενη εβδομάδα">‹</button>
+        <div class="weekstrip" id="weekStrip"></div>
+        <button class="week-nav" id="weekNext" type="button" aria-label="Επόμενη εβδομάδα">›</button>
+      </div>
+
+      <form class="form" id="eventForm">
+        <div class="field grow">
+          <label for="eventTitle">Τι θα κάνεις</label>
+          <input type="text" id="eventTitle" placeholder="π.χ. Γράψιμο αναφοράς" required maxlength="80">
+        </div>
+        <div class="field">
+          <label for="eventTime">Ώρα έναρξης</label>
+          <input type="time" id="eventTime" required>
+        </div>
+        <div class="field">
+          <label for="eventDuration">Διάρκεια</label>
+          <select id="eventDuration">
+            <option value="15">15′</option>
+            <option value="30" selected>30′</option>
+            <option value="45">45′</option>
+            <option value="60">1 ώρα</option>
+            <option value="90">1,5 ώρα</option>
+            <option value="120">2 ώρες</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="checkbox-label"><input type="checkbox" id="eventNotifyToggle" checked> Ειδοποίηση</label>
+          <select id="eventNotifyBefore">
+            <option value="0">Στην ώρα της έναρξης</option>
+            <option value="5">5′ πριν</option>
+            <option value="10" selected>10′ πριν</option>
+            <option value="15">15′ πριν</option>
+            <option value="30">30′ πριν</option>
+          </select>
+        </div>
+        <button class="btn primary" type="submit">Προσθήκη</button>
+      </form>
+
+      <ul class="list task-list" id="eventList"></ul>
+      <p class="empty-note" id="eventEmpty" hidden>Δεν έχεις τίποτα αυτή την ημέρα.</p>
+    </section>
+
+  </div>
+
+  <!-- ================= BLOOD DONATION PAGE ================= -->
+  <div class="page" id="page-blood" data-page="blood">
+
+    <section class="card">
+      <div class="section-head"><h2>Αιμοδοσία</h2><span class="muted small">Μέτρηση 90 ημερών</span></div>
+
+      <div id="bloodStatusBox"></div>
+
+      <form class="form" id="bloodForm" style="margin-top:1.1rem;">
+        <div class="field">
+          <label for="bloodDate">Ημερομηνία δωρεάς</label>
+          <input type="date" id="bloodDate" required>
+        </div>
+        <button class="btn primary" type="submit" id="bloodLogBtn">Καταχώρηση δωρεάς</button>
+      </form>
+      <p class="hint">Καταχώρησε εδώ κάθε φορά που δίνεις αίμα — η μέτρηση των 90 ημερών ξεκινάει ξανά από αυτή την ημερομηνία.</p>
+    </section>
+
+  </div>
+
+  <footer class="foot">
+    <p>Όλα τα δεδομένα αποθηκεύονται μόνο στη συσκευή σου (localStorage) — τίποτα δεν στέλνεται πουθενά.</p>
+  </footer>
+
+</main>
+
+<!-- Alarm / task ringing overlay -->
+<div class="ring-overlay" id="ringOverlay" hidden>
+  <div class="ring-box">
+    <p class="ring-kicker">Ξυπνητήρι</p>
+    <h2 id="ringLabel">Ώρα να σηκωθείς</h2>
+    <span class="ring-elapsed" id="ringElapsed"></span>
+    <div class="ring-actions">
+      <button class="btn ghost" id="ringSnooze">Αναβολή 5'</button>
+      <button class="btn primary" id="ringStop">Διακοπή</button>
+    </div>
+  </div>
+</div>
+
+<audio id="alarmAudioEl" preload="none"></audio>
+
+<script>
+/* =========================================================================
+   Ημέρα Μου — όλη η λογική σε ένα αρχείο.
+   Δεδομένα: localStorage. Δύο πίνακες: state.alarms και state.events (tasks).
+   ========================================================================= */
+
+const STORAGE_KEY = 'daytimer:v1';
+const DAY_SHORT_EL = ['Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ'];
+const DOW_MON_FIRST_EL = ['Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ', 'Κ']; // index 0 = Monday
+
+/* ---------------- State ---------------- */
+let state = loadState();
+
+function normalizeEvent(ev) {
+  if (typeof ev.durationMin !== 'number') ev.durationMin = 30;
+  if (typeof ev.notify !== 'boolean') {
+    ev.notify = typeof ev.notifyBefore === 'number' ? ev.notifyBefore !== -1 : true;
+  }
+  if (typeof ev.notifyBeforeMin !== 'number') {
+    ev.notifyBeforeMin = (typeof ev.notifyBefore === 'number' && ev.notifyBefore >= 0) ? ev.notifyBefore : 10;
+  }
+  if (typeof ev.notifiedStart !== 'boolean') ev.notifiedStart = !!ev.notified;
+  if (typeof ev.notifiedEnd !== 'boolean') ev.notifiedEnd = false;
+  if (typeof ev.completed !== 'boolean') ev.completed = false;
+  if (typeof ev.timerEndsAt === 'undefined') ev.timerEndsAt = null;
+  return ev;
+}
+
+const BLOOD_CYCLE_DAYS = 90;
+
+function normalizeBlood(b) {
+  b = b || {};
+  if (typeof b.lastDonationDate !== 'string') b.lastDonationDate = null;
+  if (typeof b.notifiedEligible !== 'boolean') b.notifiedEligible = false;
+  if (typeof b.askSnoozeUntil === 'undefined') b.askSnoozeUntil = null;
+  return b;
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { alarms: [], events: [], blood: normalizeBlood({}) };
+    const parsed = JSON.parse(raw);
+    const alarms = Array.isArray(parsed.alarms) ? parsed.alarms : [];
+    const events = (Array.isArray(parsed.events) ? parsed.events : []).map(normalizeEvent);
+    const blood = normalizeBlood(parsed.blood);
+    return { alarms, events, blood };
+  } catch (err) {
+    console.error('Δεν ήταν δυνατή η ανάγνωση αποθηκευμένων δεδομένων:', err);
+    return { alarms: [], events: [], blood: normalizeBlood({}) };
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function pad(n) { return n.toString().padStart(2, '0'); }
+
+function toLocalDateStr(d) {
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/* ---------------- Page navigation ---------------- */
+const pages = Array.from(document.querySelectorAll('.page'));
+const navtabs = Array.from(document.querySelectorAll('.navtab'));
+const VALID_PAGES = pages.map(p => p.dataset.page);
+
+function showPage(name) {
+  if (!VALID_PAGES.includes(name)) name = 'home';
+  pages.forEach(p => p.classList.toggle('active', p.dataset.page === name));
+  navtabs.forEach(b => b.classList.toggle('active', b.dataset.page === name));
+  if (location.hash.slice(1) !== name) location.hash = name;
+}
+
+navtabs.forEach(btn => btn.addEventListener('click', () => { showPage(btn.dataset.page); prefillScheduleTimeIfEmpty(); prefillAlarmTimeIfEmpty(); }));
+document.querySelectorAll('[data-goto]').forEach(btn => {
+  btn.addEventListener('click', () => { showPage(btn.dataset.goto); prefillScheduleTimeIfEmpty(); prefillAlarmTimeIfEmpty(); });
+});
+window.addEventListener('hashchange', () => { showPage(location.hash.slice(1)); prefillScheduleTimeIfEmpty(); prefillAlarmTimeIfEmpty(); });
+
+// Convenience default: if someone opens the Schedule page and the start-time
+// field is still empty, pre-fill it with the current time (rounded up to the
+// next 5 minutes) so a forgotten required field never silently blocks
+// "Προσθήκη" — this was reported as a real point of confusion.
+function prefillScheduleTimeIfEmpty() {
+  const timeInput = document.getElementById('eventTime');
+  if (timeInput && !timeInput.value) {
+    const d = new Date();
+    d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5, 0, 0); // Date normalizes hour rollover automatically
+    timeInput.value = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+}
+
+// Same courtesy default for the Alarm form's time field, for the same reason.
+function prefillAlarmTimeIfEmpty() {
+  const timeInput = document.getElementById('alarmTime');
+  if (timeInput && !timeInput.value) {
+    const d = new Date();
+    d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5, 0, 0);
+    timeInput.value = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+}
+
+/* ---------------- Clock + greeting + sun position ---------------- */
+const clockEl = document.getElementById('clockNow');
+const dateEl = document.getElementById('dateNow');
+const greetingEl = document.getElementById('greeting');
+const sunEl = document.getElementById('sunDot');
+
+function updateClock() {
+  const now = new Date();
+  clockEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  dateEl.textContent = now.toLocaleDateString('el-GR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  const h = now.getHours();
+  greetingEl.textContent =
+    h < 6 ? 'Καλό ξημέρωμα' :
+    h < 12 ? 'Καλημέρα' :
+    h < 18 ? 'Καλό απόγευμα' :
+    'Καλησπέρα';
+
+  const pct = ((h * 60 + now.getMinutes()) / (24 * 60)) * 100;
+  sunEl.style.left = `${pct}%`;
+}
+
+/* ---------------- Beep sound (Web Audio API, no audio file needed) ---------------- */
+let audioCtx = null;
+let beepInterval = null;
+
+function ensureAudioCtx() {
+  if (!audioCtx) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new Ctx();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playBeepOnce() {
+  const ctx = ensureAudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = 880;
+  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.42);
+}
+
+function startBeepSound() {
+  playBeepOnce();
+  beepInterval = setInterval(playBeepOnce, 700);
+}
+
+function stopBeepSound() {
+  if (beepInterval) clearInterval(beepInterval);
+  beepInterval = null;
+}
+
+/* ---------------- Custom online sound + fallback ---------------- */
+const alarmAudioEl = document.getElementById('alarmAudioEl');
+const testSoundBtn = document.getElementById('testSoundBtn');
+const alarmSoundUrlInput = document.getElementById('alarmSoundUrl');
+const soundFeedback = document.getElementById('soundFeedback');
+let testSoundTimeoutId = null;
+
+function isLikelyDirectAudioUrl(url) {
+  try {
+    const u = new URL(url);
+    return /^https?:$/.test(u.protocol);
+  } catch (e) {
+    return false;
+  }
+}
+
+testSoundBtn.addEventListener('click', () => {
+  const url = alarmSoundUrlInput.value.trim();
+  if (testSoundTimeoutId) { clearTimeout(testSoundTimeoutId); testSoundTimeoutId = null; }
+  alarmAudioEl.pause();
+  if (!url) {
+    soundFeedback.textContent = 'Θα ακουστεί ο προεπιλεγμένος ήχος (δεν έβαλες link).';
+    soundFeedback.className = 'sound-feedback';
+    startBeepSound();
+    testSoundTimeoutId = setTimeout(stopBeepSound, 2000);
+    return;
+  }
+  if (!isLikelyDirectAudioUrl(url)) {
+    soundFeedback.textContent = 'Αυτό δεν μοιάζει με έγκυρο link (πρέπει να ξεκινά με http:// ή https://).';
+    soundFeedback.className = 'sound-feedback err';
+    return;
+  }
+  soundFeedback.textContent = 'Παίζει δοκιμή…';
+  soundFeedback.className = 'sound-feedback';
+  alarmAudioEl.src = url;
+  alarmAudioEl.loop = false;
+  const p = alarmAudioEl.play();
+  if (p && p.then) {
+    p.then(() => {
+      soundFeedback.textContent = '✓ Δουλεύει! Θα χρησιμοποιηθεί αυτός ο ήχος.';
+      soundFeedback.className = 'sound-feedback ok';
+      testSoundTimeoutId = setTimeout(() => alarmAudioEl.pause(), 4000);
+    }).catch(() => {
+      soundFeedback.textContent = "✗ Δεν μπόρεσα να παίξω αυτό το link. Χρειάζεται άμεσο link προς αρχείο ήχου (.mp3/.wav/.ogg) — links από YouTube/Spotify δεν δουλεύουν έτσι. Θα χτυπήσει ο προεπιλεγμένος ήχος αντί γι' αυτόν.";
+      soundFeedback.className = 'sound-feedback err';
+    });
+  }
+});
+
+function startRingingAudio(alarm) {
+  const url = alarm.soundUrl;
+  if (url && isLikelyDirectAudioUrl(url)) {
+    alarmAudioEl.src = url;
+    alarmAudioEl.loop = true;
+    alarmAudioEl.currentTime = 0;
+    const p = alarmAudioEl.play();
+    if (p && p.catch) {
+      p.catch(() => { startBeepSound(); });
+    }
+    return;
+  }
+  startBeepSound();
+}
+
+function stopRingingAudio() {
+  stopBeepSound();
+  alarmAudioEl.pause();
+  alarmAudioEl.loop = false;
+  alarmAudioEl.removeAttribute('src');
+}
+
+/* ---------------- Notifications ---------------- */
+const btnPermission = document.getElementById('btnPermission');
+const permStatus = document.getElementById('permStatus');
+
+function refreshPermissionUI() {
+  if (!('Notification' in window)) {
+    permStatus.textContent = 'Ο browser δεν υποστηρίζει ειδοποιήσεις';
+    permStatus.className = 'status off';
+    btnPermission.disabled = true;
+    return;
+  }
+  const perm = Notification.permission;
+  if (perm === 'granted') {
+    permStatus.textContent = 'Ενεργές';
+    permStatus.className = 'status on';
+    btnPermission.textContent = 'Δοκιμαστική ειδοποίηση';
+  } else if (perm === 'denied') {
+    permStatus.textContent = 'Αποκλεισμένες — άλλαξέ το στις ρυθμίσεις του browser';
+    permStatus.className = 'status off';
+    btnPermission.textContent = 'Ενεργοποίηση ειδοποιήσεων';
+  } else {
+    permStatus.textContent = 'Δεν έχει ζητηθεί ακόμα';
+    permStatus.className = 'status';
+    btnPermission.textContent = 'Ενεργοποίηση ειδοποιήσεων';
+  }
+}
+
+function sendNotification(title, body) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    new Notification(title, { body });
+  } catch (err) {
+    console.error('Notification error:', err);
+  }
+}
+
+btnPermission.addEventListener('click', async () => {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    sendNotification('Ημέρα Μου', 'Έτσι θα μοιάζουν οι ειδοποιήσεις σου.');
+    return;
+  }
+  const result = await Notification.requestPermission();
+  refreshPermissionUI();
+  if (result === 'granted') {
+    sendNotification('Ημέρα Μου', 'Οι ειδοποιήσεις ενεργοποιήθηκαν!');
+  }
+});
+
+/* ---------------- Ringing overlay (full-screen alarm / task timer) ---------------- */
+const ringOverlay = document.getElementById('ringOverlay');
+const ringLabel = document.getElementById('ringLabel');
+const ringElapsed = document.getElementById('ringElapsed');
+const ringStop = document.getElementById('ringStop');
+const ringSnooze = document.getElementById('ringSnooze');
+
+let activeRingingAlarmId = null;
+let ringQueue = [];
+let ringTimeoutId = null;
+let ringStartedAt = null;
+let ringElapsedTimerId = null;
+
+function describeRingDuration(sec) {
+  if (!sec) return 'Απεριόριστα';
+  if (sec < 60) return `${sec} δευτ.`;
+  if (sec < 3600) { const m = Math.round(sec / 60); return `${m} λεπτ${m === 1 ? 'ό' : 'ά'}`; }
+  const h = Math.round(sec / 3600);
+  return `${h} ώρ${h === 1 ? 'α' : 'ες'}`;
+}
+
+function ringAlarm(alarm) {
+  if (!ringOverlay.hidden) {
+    ringQueue.push(alarm);
+    return;
+  }
+  showRingFor(alarm);
+}
+
+function showRingFor(alarm) {
+  activeRingingAlarmId = alarm.id;
+  ringLabel.textContent = alarm.label || 'Ώρα να σηκωθείς';
+  ringOverlay.hidden = false;
+  startRingingAudio(alarm);
+  sendNotification('⏰ ' + (alarm.label || 'Ξυπνητήρι'), alarm.time ? `Είναι ${alarm.time}` : '');
+
+  ringStartedAt = Date.now();
+  updateRingElapsed();
+  if (ringElapsedTimerId) clearInterval(ringElapsedTimerId);
+  ringElapsedTimerId = setInterval(updateRingElapsed, 1000);
+
+  if (ringTimeoutId) clearTimeout(ringTimeoutId);
+  const durationSec = alarm.ringDurationSec;
+  ringTimeoutId = durationSec ? setTimeout(() => handleRingStop(), durationSec * 1000) : null;
+}
+
+function updateRingElapsed() {
+  if (!ringStartedAt) { ringElapsed.textContent = ''; return; }
+  const secs = Math.floor((Date.now() - ringStartedAt) / 1000);
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  ringElapsed.textContent = `Χτυπάει ${m > 0 ? m + '\u2032 ' : ''}${s}\u2033`;
+}
+
+function closeRingAndAdvance() {
+  if (ringTimeoutId) { clearTimeout(ringTimeoutId); ringTimeoutId = null; }
+  if (ringElapsedTimerId) { clearInterval(ringElapsedTimerId); ringElapsedTimerId = null; }
+  stopRingingAudio();
+  activeRingingAlarmId = null;
+  ringStartedAt = null;
+  if (ringQueue.length > 0) {
+    const next = ringQueue.shift();
+    showRingFor(next);
+  } else {
+    ringOverlay.hidden = true;
+  }
+}
+
+function handleRingStop() {
+  const alarm = state.alarms.find(a => a.id === activeRingingAlarmId);
+  closeRingAndAdvance();
+  if (alarm && alarm.days.length === 0) {
+    alarm.enabled = false;
+    saveState();
+    renderAlarms();
+    renderTimeline();
+    renderHomeSummary();
+  }
+}
+
+function handleRingSnooze() {
+  const alarm = state.alarms.find(a => a.id === activeRingingAlarmId);
+  closeRingAndAdvance();
+  if (alarm) {
+    alarm.snoozeUntil = Date.now() + 5 * 60 * 1000;
+    saveState();
+  }
+}
+
+ringStop.addEventListener('click', handleRingStop);
+ringSnooze.addEventListener('click', handleRingSnooze);
+
+/* ---------------- Alarms: form + list + rendering ---------------- */
+const alarmForm = document.getElementById('alarmForm');
+const alarmTimeInput = document.getElementById('alarmTime');
+const alarmLabelInput = document.getElementById('alarmLabel');
+const alarmDaysWrap = document.getElementById('alarmDays');
+const alarmDurationInput = document.getElementById('alarmDuration');
+const alarmList = document.getElementById('alarmList');
+const alarmEmpty = document.getElementById('alarmEmpty');
+
+let selectedDays = new Set();
+
+alarmDaysWrap.querySelectorAll('button[data-day]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const d = Number(btn.dataset.day);
+    if (selectedDays.has(d)) { selectedDays.delete(d); btn.classList.remove('active'); }
+    else { selectedDays.add(d); btn.classList.add('active'); }
+  });
+});
+
+alarmForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!alarmTimeInput.value) return;
+  const rawSoundUrl = alarmSoundUrlInput.value.trim();
+  const alarm = {
+    id: uid(),
+    time: alarmTimeInput.value,
+    label: alarmLabelInput.value.trim(),
+    days: Array.from(selectedDays).sort(),
+    enabled: true,
+    firedFor: null,
+    snoozeUntil: null,
+    ringDurationSec: Number(alarmDurationInput.value) || null,
+    soundUrl: rawSoundUrl && isLikelyDirectAudioUrl(rawSoundUrl) ? rawSoundUrl : null,
+  };
+  state.alarms.push(alarm);
+  saveState();
+  alarmForm.reset();
+  selectedDays.clear();
+  alarmDaysWrap.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  soundFeedback.textContent = '';
+  prefillAlarmTimeIfEmpty();
+  renderAlarms();
+  renderTimeline();
+  renderHomeSummary();
+});
+
+function describeAlarmRepeat(alarm) {
+  if (alarm.days.length === 0) return 'Μία φορά';
+  if (alarm.days.length === 7) return 'Καθημερινά';
+  return alarm.days.slice().sort().map(d => DAY_SHORT_EL[d]).join(' ');
+}
+
+function renderAlarms() {
+  alarmList.innerHTML = '';
+  const sorted = [...state.alarms].sort((a, b) => a.time.localeCompare(b.time));
+  alarmEmpty.hidden = sorted.length > 0;
+
+  for (const alarm of sorted) {
+    const li = document.createElement('li');
+    li.className = 'kind-alarm' + (alarm.enabled ? '' : ' disabled');
+
+    const swatch = document.createElement('div');
+    swatch.className = 'swatch';
+
+    const main = document.createElement('div');
+    main.className = 'item-main';
+    const durationText = describeRingDuration(alarm.ringDurationSec);
+    const soundText = alarm.soundUrl ? ' · Δικός σου ήχος' : '';
+    main.innerHTML = `
+      <div class="item-time">${alarm.time}</div>
+      <div class="item-label">${escapeHtml(alarm.label || 'Χωρίς ετικέτα')} · ${describeAlarmRepeat(alarm)} · Χτυπάει: ${durationText}${soundText}</div>
+    `;
+
+    const toggle = document.createElement('button');
+    toggle.className = 'toggle' + (alarm.enabled ? ' on' : '');
+    toggle.setAttribute('aria-label', 'Ενεργό/Ανενεργό ξυπνητήρι');
+    toggle.addEventListener('click', () => {
+      alarm.enabled = !alarm.enabled;
+      saveState();
+      renderAlarms();
+      renderTimeline();
+      renderHomeSummary();
+    });
+
+    const actions = document.createElement('div');
+    actions.className = 'item-actions';
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '✕';
+    delBtn.setAttribute('aria-label', 'Διαγραφή ξυπνητηριού');
+    delBtn.addEventListener('click', () => {
+      state.alarms = state.alarms.filter(a => a.id !== alarm.id);
+      saveState();
+      renderAlarms();
+      renderTimeline();
+      renderHomeSummary();
+    });
+    actions.appendChild(delBtn);
+
+    li.appendChild(swatch);
+    li.appendChild(main);
+    li.appendChild(toggle);
+    li.appendChild(actions);
+    alarmList.appendChild(li);
+  }
+}
+
+/* ---------------- Schedule: week strip + tasks ---------------- */
+let selectedDateStr = toLocalDateStr(new Date());
+
+const weekStripEl = document.getElementById('weekStrip');
+const weekPrevBtn = document.getElementById('weekPrev');
+const weekNextBtn = document.getElementById('weekNext');
+
+function startOfWeek(d) {
+  const dow = (d.getDay() + 6) % 7; // 0 = Monday
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - dow);
+  monday.setHours(0, 0, 0, 0);
+  return monday;
+}
+
+function getWeekDates(d) {
+  const monday = startOfWeek(d);
+  return Array.from({ length: 7 }, (_, i) => {
+    const dt = new Date(monday);
+    dt.setDate(monday.getDate() + i);
+    return dt;
+  });
+}
+
+function renderWeekStrip() {
+  const selDate = new Date(selectedDateStr + 'T00:00:00');
+  const week = getWeekDates(selDate);
+  const todayStr = toLocalDateStr(new Date());
+  const datesWithTasks = new Set(state.events.map(e => e.date));
+
+  weekStripEl.innerHTML = '';
+  week.forEach(d => {
+    const dStr = toLocalDateStr(d);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'day-pill'
+      + (dStr === selectedDateStr ? ' active' : '')
+      + (dStr === todayStr ? ' is-today' : '')
+      + (datesWithTasks.has(dStr) ? ' has-tasks' : '');
+    btn.dataset.date = dStr;
+    btn.innerHTML = `<span class="dp-dow">${DOW_MON_FIRST_EL[(d.getDay() + 6) % 7]}</span><span class="dp-num">${d.getDate()}</span>`;
+    btn.addEventListener('click', () => {
+      selectedDateStr = dStr;
+      renderWeekStrip();
+      renderEvents();
+    });
+    weekStripEl.appendChild(btn);
+  });
+}
+
+weekPrevBtn.addEventListener('click', () => {
+  const d = new Date(selectedDateStr + 'T00:00:00');
+  d.setDate(d.getDate() - 7);
+  selectedDateStr = toLocalDateStr(d);
+  renderWeekStrip();
+  renderEvents();
+});
+weekNextBtn.addEventListener('click', () => {
+  const d = new Date(selectedDateStr + 'T00:00:00');
+  d.setDate(d.getDate() + 7);
+  selectedDateStr = toLocalDateStr(d);
+  renderWeekStrip();
+  renderEvents();
+});
+
+const eventForm = document.getElementById('eventForm');
+const eventTitleInput = document.getElementById('eventTitle');
+const eventTimeInput = document.getElementById('eventTime');
+const eventDurationInput = document.getElementById('eventDuration');
+const eventNotifyToggle = document.getElementById('eventNotifyToggle');
+const eventNotifyBeforeInput = document.getElementById('eventNotifyBefore');
+const eventList = document.getElementById('eventList');
+const eventEmpty = document.getElementById('eventEmpty');
+
+eventForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!eventTitleInput.value.trim() || !eventTimeInput.value) return;
+  const ev = normalizeEvent({
+    id: uid(),
+    title: eventTitleInput.value.trim(),
+    date: selectedDateStr,
+    time: eventTimeInput.value,
+    durationMin: Number(eventDurationInput.value) || 30,
+    notify: eventNotifyToggle.checked,
+    notifyBeforeMin: Number(eventNotifyBeforeInput.value) || 0,
+    notifiedStart: false,
+    notifiedEnd: false,
+    completed: false,
+    timerEndsAt: null,
+  });
+  state.events.push(ev);
+  saveState();
+  eventForm.reset();
+  eventDurationInput.value = '30';
+  eventNotifyToggle.checked = true;
+  eventNotifyBeforeInput.value = '10';
+  prefillScheduleTimeIfEmpty();
+  renderWeekStrip();
+  renderEvents();
+  renderTimeline();
+  renderHomeSummary();
+});
+
+function formatEndTime(startTime, durationMin) {
+  const [h, m] = startTime.split(':').map(Number);
+  const total = h * 60 + m + durationMin;
+  const eh = Math.floor((total % (24 * 60)) / 60);
+  const em = total % 60;
+  return `${pad(eh)}:${pad(em)}`;
+}
+
+function describeDuration(min) {
+  if (min < 60) return `${min}′`;
+  const h = min / 60;
+  return (h % 1 === 0) ? `${h} ώρ${h === 1 ? 'α' : 'ες'}` : `${h.toFixed(1)} ώρ.`;
+}
+
+function startTaskTimer(ev) {
+  ev.timerEndsAt = Date.now() + ev.durationMin * 60000;
+  saveState();
+  renderEvents();
+  ensureTaskTimerLoop();
+}
+
+function stopTaskTimer(ev) {
+  ev.timerEndsAt = null;
+  saveState();
+  renderEvents();
+}
+
+let taskTimerTickId = null;
+function ensureTaskTimerLoop() {
+  if (taskTimerTickId) return;
+  taskTimerTickId = setInterval(() => {
+    let anyActive = false;
+    for (const ev of state.events) {
+      if (ev.timerEndsAt) {
+        if (Date.now() >= ev.timerEndsAt) {
+          ev.timerEndsAt = null;
+          saveState();
+          ringAlarm({ id: 'task-' + ev.id, label: 'Ώρα να τελειώσεις: ' + ev.title, ringDurationSec: null, soundUrl: null });
+        } else {
+          anyActive = true;
+        }
+      }
+    }
+    renderEvents();
+    if (!anyActive) { clearInterval(taskTimerTickId); taskTimerTickId = null; }
+  }, 1000);
+}
+
+function renderEvents() {
+  eventList.innerHTML = '';
+  const todaysList = state.events
+    .filter(ev => ev.date === selectedDateStr)
+    .sort((a, b) => a.time.localeCompare(b.time));
+  eventEmpty.hidden = todaysList.length > 0;
+
+  for (const ev of todaysList) {
+    const li = document.createElement('li');
+    li.className = 'task-item kind-event' + (ev.completed ? ' completed' : '');
+
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'task-check' + (ev.completed ? ' checked' : '');
+    check.innerHTML = ev.completed ? '✓' : '';
+    check.setAttribute('aria-label', 'Ολοκληρώθηκε');
+    check.addEventListener('click', () => {
+      ev.completed = !ev.completed;
+      if (ev.completed) ev.timerEndsAt = null;
+      saveState();
+      renderEvents();
+      renderHomeSummary();
+      renderTimeline();
+    });
+
+    const main = document.createElement('div');
+    main.className = 'task-main';
+    const endTime = formatEndTime(ev.time, ev.durationMin);
+    const notifyBadge = ev.notify ? `<span class="task-notify-badge">🔔 ${ev.notifyBeforeMin > 0 ? ev.notifyBeforeMin + '′ πριν' : 'στην ώρα'}</span>` : '';
+    main.innerHTML = `
+      <div class="task-time">${ev.time}–${endTime} <span class="task-dur-badge">${describeDuration(ev.durationMin)}</span> ${notifyBadge}</div>
+      <div class="task-title">${escapeHtml(ev.title)}</div>
+    `;
+
+    const timerRow = document.createElement('div');
+    timerRow.className = 'task-timer-row';
+    const timerBtn = document.createElement('button');
+    timerBtn.type = 'button';
+    timerBtn.className = 'btn ghost small timer-btn';
+    if (ev.timerEndsAt) {
+      const remaining = Math.max(0, Math.ceil((ev.timerEndsAt - Date.now()) / 1000));
+      const m = Math.floor(remaining / 60), s = remaining % 60;
+      timerBtn.textContent = `⏹ ${pad(m)}:${pad(s)}`;
+      timerBtn.classList.add('running');
+      timerBtn.addEventListener('click', () => stopTaskTimer(ev));
+    } else {
+      timerBtn.textContent = '⏱ Χρονόμετρο';
+      timerBtn.disabled = ev.completed;
+      timerBtn.addEventListener('click', () => startTaskTimer(ev));
+    }
+    timerRow.appendChild(timerBtn);
+    main.appendChild(timerRow);
+
+    const actions = document.createElement('div');
+    actions.className = 'task-actions';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.textContent = '✕';
+    delBtn.setAttribute('aria-label', 'Διαγραφή');
+    delBtn.addEventListener('click', () => {
+      state.events = state.events.filter(x => x.id !== ev.id);
+      saveState();
+      renderWeekStrip();
+      renderEvents();
+      renderTimeline();
+      renderHomeSummary();
+    });
+    actions.appendChild(delBtn);
+
+    li.appendChild(check);
+    li.appendChild(main);
+    li.appendChild(actions);
+    eventList.appendChild(li);
+  }
+}
+
+/* ---------------- Today timeline (merged view, on Home) ---------------- */
+const timelineEl = document.getElementById('timeline');
+const timelineEmpty = document.getElementById('timelineEmpty');
+
+function todaysAlarms() {
+  const now = new Date();
+  const todayDow = now.getDay();
+  return state.alarms.filter(a => a.enabled && (a.days.length === 0 || a.days.includes(todayDow)));
+}
+
+function todaysEvents() {
+  const todayStr = toLocalDateStr(new Date());
+  return state.events.filter(ev => ev.date === todayStr);
+}
+
+function renderTimeline() {
+  const items = [
+    ...todaysAlarms().map(a => ({ kind: 'alarm', time: a.time, label: a.label || 'Ξυπνητήρι' })),
+    ...todaysEvents().map(ev => ({ kind: 'event', time: ev.time, label: ev.title + (ev.completed ? ' ✓' : '') })),
+  ].sort((a, b) => a.time.localeCompare(b.time));
+
+  timelineEl.innerHTML = '';
+  timelineEmpty.hidden = items.length > 0;
+
+  for (const item of items) {
+    const li = document.createElement('li');
+    li.className = 'kind-' + item.kind;
+    li.innerHTML = `<span class="t-time">${item.time}</span><span class="t-label">${escapeHtml(item.label)}</span>`;
+    timelineEl.appendChild(li);
+  }
+}
+
+/* ---------------- Home summary counts ---------------- */
+const homeAlarmCount = document.getElementById('homeAlarmCount');
+const homeEventCount = document.getElementById('homeEventCount');
+
+function renderHomeSummary() {
+  homeAlarmCount.textContent = todaysAlarms().length;
+  homeEventCount.textContent = todaysEvents().filter(ev => !ev.completed).length;
+  renderHomeBloodSummary();
+}
+
+/* ---------------- Blood donation (90-day cycle) ---------------- */
+const bloodStatusBox = document.getElementById('bloodStatusBox');
+const bloodForm = document.getElementById('bloodForm');
+const bloodDateInput = document.getElementById('bloodDate');
+const homeBloodStatus = document.getElementById('homeBloodStatus');
+const homeBloodSub = document.getElementById('homeBloodSub');
+
+bloodDateInput.value = toLocalDateStr(new Date());
+
+function addDaysToDateStr(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function daysBetweenDates(a, b) {
+  const MS_PER_DAY = 86400000;
+  const aMid = new Date(a.getFullYear(), a.getMonth(), a.getDate()).getTime();
+  const bMid = new Date(b.getFullYear(), b.getMonth(), b.getDate()).getTime();
+  return Math.round((bMid - aMid) / MS_PER_DAY);
+}
+
+bloodForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!bloodDateInput.value) return;
+  state.blood.lastDonationDate = bloodDateInput.value;
+  state.blood.notifiedEligible = false;
+  state.blood.askSnoozeUntil = null;
+  saveState();
+  renderBlood();
+  renderHomeSummary();
+});
+
+function renderBlood() {
+  const b = state.blood;
+  bloodStatusBox.innerHTML = '';
+
+  if (!b.lastDonationDate) {
+    const div = document.createElement('div');
+    div.className = 'blood-state';
+    div.innerHTML = `<p class="blood-sub-status">Δεν έχεις καταχωρήσει ακόμα δωρεά αίματος. Συμπλήρωσε την ημερομηνία παρακάτω για να ξεκινήσει η μέτρηση των ${BLOOD_CYCLE_DAYS} ημερών.</p>`;
+    bloodStatusBox.appendChild(div);
+    return;
+  }
+
+  const now = new Date();
+  const nextEligible = addDaysToDateStr(b.lastDonationDate, BLOOD_CYCLE_DAYS);
+  const daysLeft = daysBetweenDates(now, nextEligible);
+  const lastDate = new Date(b.lastDonationDate + 'T00:00:00');
+  const daysSince = daysBetweenDates(lastDate, now);
+  const niceLastDate = lastDate.toLocaleDateString('el-GR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const div = document.createElement('div');
+  div.className = 'blood-state';
+
+  if (daysLeft > 0) {
+    const pct = Math.min(100, Math.round((daysSince / BLOOD_CYCLE_DAYS) * 100));
+    const niceNextDate = nextEligible.toLocaleDateString('el-GR', { day: 'numeric', month: 'long', year: 'numeric' });
+    div.innerHTML = `
+      <div class="blood-big-status">${daysLeft} μέρ${daysLeft === 1 ? 'α' : 'ες'} ακόμα</div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <p class="blood-sub-status">Τελευταία δωρεά: ${niceLastDate}. Επόμενη δυνατή δωρεά: ${niceNextDate}.</p>
+    `;
+  } else if (b.askSnoozeUntil && now.getTime() < b.askSnoozeUntil) {
+    div.innerHTML = `
+      <div class="blood-big-status ready">🩸 Μπορείς να ξαναδώσεις αίμα</div>
+      <p class="blood-sub-status">Θα σου ξαναθυμίσουμε σύντομα να μας πεις αν έδωσες. Αν έδωσες ήδη, καταχώρησέ το παρακάτω.</p>
+    `;
+  } else {
+    const banner = document.createElement('div');
+    banner.className = 'blood-ready-banner';
+    banner.innerHTML = `
+      <div class="blood-big-status">🩸 Μπορείς να ξαναδώσεις αίμα!</div>
+      <p class="blood-sub-status">Πέρασαν ${daysSince} μέρες από τη δωρεά στις ${niceLastDate}. Αν έδωσες ήδη, καταχώρησέ το παρακάτω. Αν όχι ακόμα:</p>
+      <div><button class="btn ghost small" type="button" id="bloodSnoozeBtn">Θύμισέ μου σε 1 μέρα</button></div>
+    `;
+    div.appendChild(banner);
+  }
+  bloodStatusBox.appendChild(div);
+
+  const snoozeBtn = document.getElementById('bloodSnoozeBtn');
+  if (snoozeBtn) {
+    snoozeBtn.addEventListener('click', () => {
+      state.blood.askSnoozeUntil = Date.now() + 24 * 3600000;
+      saveState();
+      renderBlood();
+    });
+  }
+}
+
+function renderHomeBloodSummary() {
+  const b = state.blood;
+  if (!b.lastDonationDate) {
+    homeBloodStatus.textContent = '—';
+    homeBloodSub.textContent = 'καταχώρησε δωρεά';
+    return;
+  }
+  const nextEligible = addDaysToDateStr(b.lastDonationDate, BLOOD_CYCLE_DAYS);
+  const daysLeft = daysBetweenDates(new Date(), nextEligible);
+  if (daysLeft > 0) {
+    homeBloodStatus.textContent = String(daysLeft);
+    homeBloodStatus.classList.remove('sc-count-text');
+    homeBloodSub.textContent = `μέρ${daysLeft === 1 ? 'α' : 'ες'} ακόμα`;
+  } else {
+    homeBloodStatus.textContent = 'Έτοιμος/η!';
+    homeBloodStatus.classList.add('sc-count-text');
+    homeBloodSub.textContent = 'μπορείς να ξαναδώσεις';
+  }
+}
+
+function checkBlood(now) {
+  const b = state.blood;
+  if (!b.lastDonationDate) return;
+  const nextEligible = addDaysToDateStr(b.lastDonationDate, BLOOD_CYCLE_DAYS);
+  if (now < nextEligible) return;
+
+  if (!b.notifiedEligible) {
+    b.notifiedEligible = true;
+    saveState();
+    sendNotification('🩸 Μπορείς να ξαναδώσεις αίμα!', `Πέρασαν ${BLOOD_CYCLE_DAYS} μέρες από την τελευταία δωρεά.`);
+    renderBlood();
+    renderHomeBloodSummary();
+  } else if (b.askSnoozeUntil && now.getTime() >= b.askSnoozeUntil) {
+    b.askSnoozeUntil = null;
+    saveState();
+    sendNotification('🩸 Έδωσες αίμα;', 'Πες μας για να συνεχίσουμε τη μέτρηση.');
+    renderBlood();
+  }
+}
+
+/* ---------------- Utility ---------------- */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ---------------- Watcher loop ---------------- */
+function checkAlarms(now) {
+  const hhmm = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const todayStr = toLocalDateStr(now);
+  const todayDow = now.getDay();
+
+  for (const alarm of state.alarms) {
+    if (!alarm.enabled) continue;
+
+    if (alarm.snoozeUntil) {
+      if (Date.now() >= alarm.snoozeUntil) {
+        alarm.snoozeUntil = null;
+        saveState();
+        ringAlarm(alarm);
+      }
+      continue;
+    }
+
+    const appliesToday = alarm.days.length === 0 || alarm.days.includes(todayDow);
+    if (!appliesToday) continue;
+    if (alarm.time !== hhmm) continue;
+
+    const fireKey = `${todayStr} ${hhmm}`;
+    if (alarm.firedFor === fireKey) continue;
+
+    alarm.firedFor = fireKey;
+    saveState();
+    ringAlarm(alarm);
+  }
+}
+
+function checkEvents(now) {
+  for (const ev of state.events) {
+    const startDT = new Date(`${ev.date}T${ev.time}:00`);
+
+    if (ev.notify && !ev.notifiedStart) {
+      const notifyAt = new Date(startDT.getTime() - ev.notifyBeforeMin * 60000);
+      if (now >= notifyAt) {
+        ev.notifiedStart = true;
+        saveState();
+        sendNotification('▶️ Ώρα να ξεκινήσεις', ev.title);
+      }
+    }
+
+    if (ev.notify && !ev.completed && !ev.notifiedEnd) {
+      const endDT = new Date(startDT.getTime() + ev.durationMin * 60000);
+      if (now >= endDT) {
+        ev.notifiedEnd = true;
+        saveState();
+        sendNotification('✅ Ώρα να τελειώσεις', ev.title);
+      }
+    }
+  }
+}
+
+function tick() {
+  const now = new Date();
+...
+
+[Περικομμένο μήνυμα]  Προβολή ολόκληρου του μηνύματος
